@@ -1,0 +1,14 @@
+{
+    "name": "zero/sms-assistant-php",
+    "description": "PHP library for using sms-assistent.by HTTP API",
+    "type": "library",
+    "homepage": "https://github.com/ByZer0/sms-assistant-php",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "ByZer0\\SmsAssistantBy\\": "src"
+        }
+    },
+    "require": {}
+}
