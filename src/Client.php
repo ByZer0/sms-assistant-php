@@ -138,19 +138,19 @@ class Client
      * Send single message.
      *
      * @param string    $phone   Recipient phone number.
-     * @param string    $message Message text.
+     * @param string    $text    Message text.
      * @param \DateTime $time    Time when send message. Optional, only if message delivery must be delayed.
      * @param string    $sender  Sender name, default internal sender name will be used if empty.
      *
      * @return bool
      */
-    public function sendMessage($phone, $message, $time = null, $sender = null)
+    public function sendMessage($phone, $text, $time = null, $sender = null)
     {
         $data = [
             'user'      => $this->username,
             'password'  => $this->password,
             'recipient' => $phone,
-            'message'   => $message,
+            'message'   => $text,
             'sender'    => $sender ?: $this->sender,
         ];
         if (!is_null($time)) {
@@ -163,6 +163,38 @@ class Client
         } else {
             return $code;
         }
+    }
+
+    public function sendMessages($messages, $default = [], $time = null)
+    {
+        $data = '<?xml version="1.0" encoding="utf-8" ?>';
+        $attributes = "login=\"{$this->username}\" password=\"{$this->password}\"";
+        if (isset($time)) {
+            $attributes .= " date_send=\"{$time->format('YmdHi')}\"";
+        }
+        $data .= "<package $attributes><message>";
+
+        $attributes = '';
+        if (isset($default['sender'])) {
+            $attributes .= " sender=\"{$default['sender']}\"";
+        } else {
+            $attributes .= " sender=\"{$this->sender}\"";
+        }
+        $text = isset($default['text']) ? $default['text'] : '';
+        $data .= "<default$attributes>$text</default>";
+
+        foreach ($messages as $message) {
+            $text = isset($message['text']) ? $message['text'] : '';
+            $attributes = '';
+            if (isset($message['sender'])) {
+                $attributes .= " sender=\"{$message['sender']}\"";
+            }
+
+            $data .= "<msg recipient=\"{$message['phone']}\"$attributes>$text</msg>";
+        }
+
+        $data .= '</message></package>';
+        return $this->client->postXml($this->getEndpointUrl('xml'), $data);
     }
 
     /**

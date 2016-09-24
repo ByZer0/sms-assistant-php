@@ -27,6 +27,7 @@
 namespace ByZer0\SmsAssistantBy\Request;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 
 /**
  * Request interface implementation with Guzzle library.
@@ -64,6 +65,14 @@ class GuzzleRequest implements RequestInterface
         return $client->post($url, [
             'data' => $data,
         ]);
+    }
+
+    public function postXml($url, $xml)
+    {
+        $client = $this->getClient();
+        $request = new Request('POST', $url, ['Content-Type' => 'text/xml; charset=UTF8'], $xml);
+
+        return $client->send($request);
     }
 
     /**

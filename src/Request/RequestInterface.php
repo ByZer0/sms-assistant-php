@@ -48,4 +48,12 @@ interface RequestInterface
      * @param array  $data
      */
     public function post($url, $data);
+
+    /**
+     * Make POST request to API with XML data (Content-Type: text/xml; charset=UTF8).
+     *
+     * @param string $url
+     * @param string $xml
+     */
+    public function postXml($url, $xml);
 }
