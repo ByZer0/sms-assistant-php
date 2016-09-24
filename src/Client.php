@@ -137,10 +137,10 @@ class Client
     /**
      * Send single message.
      *
-     * @param string    $phone   Recipient phone number.
-     * @param string    $text    Message text.
-     * @param \DateTime $time    Time when send message. Optional, only if message delivery must be delayed.
-     * @param string    $sender  Sender name, default internal sender name will be used if empty.
+     * @param string    $phone  Recipient phone number.
+     * @param string    $text   Message text.
+     * @param \DateTime $time   Time when send message. Optional, only if message delivery must be delayed.
+     * @param string    $sender Sender name, default internal sender name will be used if empty.
      *
      * @return bool
      */
@@ -192,8 +192,8 @@ class Client
 
             $data .= "<msg recipient=\"{$message['phone']}\"$attributes>$text</msg>";
         }
-
         $data .= '</message></package>';
+
         return $this->client->postXml($this->getEndpointUrl('xml'), $data);
     }
 
