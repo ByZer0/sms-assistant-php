@@ -141,6 +141,7 @@ class Client
      * @param string    $message Message text.
      * @param \DateTime $time    Time when send message. Optional, only if message delivery must be delayed.
      * @param string    $sender  Sender name, default internal sender name will be used if empty.
+     *
      * @return bool
      */
     public function sendMessage($phone, $message, $time = null, $sender = null)
