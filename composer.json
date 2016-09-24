@@ -10,5 +10,7 @@
             "ByZer0\\SmsAssistantBy\\": "src"
         }
     },
-    "require": {}
+    "suggest": {
+        "guzzlehttp/guzzle": "For using ByZer0\\SmsAssistantBy\\Request\\GuzzleRequest"
+    }
 }
