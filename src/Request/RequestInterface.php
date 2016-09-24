@@ -27,7 +27,7 @@
 namespace ByZer0\SmsAssistantBy\Request;
 
 /**
- * Description of RequestInterface
+ * Common interface for HTTP libraries.
  *
  * @author Zer0
  */
@@ -37,7 +37,7 @@ interface RequestInterface
      * Make GET request to API. $data will be sent as query params.
      *
      * @param string $url
-     * @param array $data
+     * @param array  $data
      */
     public function get($url, $data);
 
@@ -45,7 +45,7 @@ interface RequestInterface
      * Make POST request to API. $data will be sent as POST data in request body.
      *
      * @param string $url
-     * @param array $data
+     * @param array  $data
      */
     public function post($url, $data);
 }

@@ -33,5 +33,4 @@ namespace ByZer0\SmsAssistantBy\Exceptions;
  */
 class ServerException extends Exception
 {
-    
 }

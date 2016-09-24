@@ -34,5 +34,4 @@ namespace ByZer0\SmsAssistantBy\Exceptions;
  */
 class LowBalanceException extends Exception
 {
-    
 }

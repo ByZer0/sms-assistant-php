@@ -103,8 +103,9 @@ class Client
 
     /**
      * Make absolute API endpoint URL from relative.
-     * 
+     *
      * @param string $uri
+     *
      * @return string
      */
     protected function getEndpointUrl($uri)
@@ -136,10 +137,10 @@ class Client
     /**
      * Send single message.
      *
-     * @param string    $phone Recipient phone number.
+     * @param string    $phone   Recipient phone number.
      * @param string    $message Message text.
-     * @param \DateTime $time Time when send message. Optional, only if message delivery must be delayed.
-     * @param string    $sender Sender name, default internal sender name will be used if empty.
+     * @param \DateTime $time    Time when send message. Optional, only if message delivery must be delayed.
+     * @param string    $sender  Sender name, default internal sender name will be used if empty.
      * @return bool
      */
     public function sendMessage($phone, $message, $time = null, $sender = null)
@@ -173,6 +174,7 @@ class Client
     public function setUsername($username)
     {
         $this->username = $username;
+
         return $this;
     }
 
@@ -186,6 +188,7 @@ class Client
     public function setPassword($password)
     {
         $this->password = $password;
+
         return $this;
     }
 
@@ -199,6 +202,7 @@ class Client
     public function setSender($sender)
     {
         $this->sender = $sender;
+
         return $this;
     }
 }
