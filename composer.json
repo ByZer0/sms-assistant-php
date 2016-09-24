@@ -1,5 +1,5 @@
 {
-    "name": "zero/sms-assistant-php",
+    "name": "by-zer0/sms-assistant-php",
     "description": "PHP library for using sms-assistent.by HTTP API",
     "type": "library",
     "homepage": "https://github.com/ByZer0/sms-assistant-php",
