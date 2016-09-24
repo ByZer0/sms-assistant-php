@@ -27,7 +27,7 @@
 namespace ByZer0\SmsAssistantBy\Exceptions;
 
 /**
- * Description of LowBalanceException
+ * Incorrect message send time. Time can be only in the future, +10 minutes from current.
  *
  * @author Zer0
  */

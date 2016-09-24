@@ -27,7 +27,8 @@
 namespace ByZer0\SmsAssistantBy\Exceptions;
 
 /**
- * Description of LowBalanceException
+ * This exception can be thrown if account balance is too low and
+ * you have not enough credits to send message.
  *
  * @author Zer0
  */

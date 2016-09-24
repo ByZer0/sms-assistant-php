@@ -27,7 +27,7 @@
 namespace ByZer0\SmsAssistantBy\Exceptions;
 
 /**
- * Description of LowBalanceException
+ * Incorrect message ID used in request.
  *
  * @author Zer0
  */

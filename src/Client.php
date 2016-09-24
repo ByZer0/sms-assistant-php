@@ -68,6 +68,7 @@ class Client
      * to your account senders.
      *
      * @var string
+     *
      * @link http://help.sms-assistent.by/termini-i-opredeleniya/otpravitel-soobscheniya/
      */
     protected $sender;
@@ -76,9 +77,9 @@ class Client
      * Construct instance of Client. Need to pass API authorization data (username and password)
      * to constructor. Also, sender name is required. Sender name must be one of available to you
      * senders.
-     * 
-     * @param string $username
-     * @param string $password
+     *
+     * @param string                                          $username
+     * @param string                                          $password
      * @param \ByZer0\SmsAssistantBy\Request\RequestInterface $httpClient
      */
     public function __construct($username, $password, $httpClient)
@@ -108,19 +109,20 @@ class Client
      */
     protected function getEndpointUrl($uri)
     {
-        return $this->baseUrl . $uri;
+        return $this->baseUrl.$uri;
     }
 
     /**
      * Retreive current user balance status. Returns available amount of credits.
      *
-     * @return float
      * @throws \ByZer0\SmsAssistantBy\Exceptions\Exception
+     *
+     * @return float
      */
     public function getBalance()
     {
         $response = $this->client->get($this->getEndpointUrl('credits/plain'), [
-            'user' => $this->username,
+            'user'     => $this->username,
             'password' => $this->password,
         ]);
         $balance = floatval($response);
@@ -134,20 +136,20 @@ class Client
     /**
      * Send single message.
      *
-     * @param string $phone Recipient phone number.
-     * @param string $message Message text.
+     * @param string    $phone Recipient phone number.
+     * @param string    $message Message text.
      * @param \DateTime $time Time when send message. Optional, only if message delivery must be delayed.
-     * @param string $sender Sender name, default internal sender name will be used if empty.
-     * @return boolean
+     * @param string    $sender Sender name, default internal sender name will be used if empty.
+     * @return bool
      */
     public function sendMessage($phone, $message, $time = null, $sender = null)
     {
         $data = [
-            'user' => $this->username,
-            'password' => $this->password,
+            'user'      => $this->username,
+            'password'  => $this->password,
             'recipient' => $phone,
-            'message' => $message,
-            'sender' => $sender ?: $this->sender,
+            'message'   => $message,
+            'sender'    => $sender ?: $this->sender,
         ];
         if (!is_null($time)) {
             $data['date_send'] = $time->format('YmdHi');
@@ -163,8 +165,9 @@ class Client
 
     /**
      * Change username for API requests.
-     * 
+     *
      * @param string $username
+     *
      * @return $this
      */
     public function setUsername($username)
@@ -175,8 +178,9 @@ class Client
 
     /**
      * Change password for API requests.
-     * 
+     *
      * @param string $password
+     *
      * @return $this
      */
     public function setPassword($password)
@@ -187,8 +191,9 @@ class Client
 
     /**
      * Change sender name.
-     * 
+     *
      * @param string $sender
+     *
      * @return $this
      */
     public function setSender($sender)

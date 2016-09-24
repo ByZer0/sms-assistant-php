@@ -34,13 +34,13 @@ namespace ByZer0\SmsAssistantBy\Exceptions;
 class Exception extends \Exception
 {
     protected static $codes = [
-        -1 => 'ByZer0\SmsAssistantBy\Exceptions\LowBalanceException',
-        -2 => 'ByZer0\SmsAssistantBy\Exceptions\AuthentificationException',
-        -3 => 'ByZer0\SmsAssistantBy\Exceptions\MessageTextException',
-        -4 => 'ByZer0\SmsAssistantBy\Exceptions\PhoneNumberException',
-        -5 => 'ByZer0\SmsAssistantBy\Exceptions\SenderNameException',
-        -6 => 'ByZer0\SmsAssistantBy\Exceptions\AuthentificationException',
-        -7 => 'ByZer0\SmsAssistantBy\Exceptions\AuthentificationException',
+        -1  => 'ByZer0\SmsAssistantBy\Exceptions\LowBalanceException',
+        -2  => 'ByZer0\SmsAssistantBy\Exceptions\AuthentificationException',
+        -3  => 'ByZer0\SmsAssistantBy\Exceptions\MessageTextException',
+        -4  => 'ByZer0\SmsAssistantBy\Exceptions\PhoneNumberException',
+        -5  => 'ByZer0\SmsAssistantBy\Exceptions\SenderNameException',
+        -6  => 'ByZer0\SmsAssistantBy\Exceptions\AuthentificationException',
+        -7  => 'ByZer0\SmsAssistantBy\Exceptions\AuthentificationException',
         -10 => 'ByZer0\SmsAssistantBy\Exceptions\ServerException',
         -11 => 'ByZer0\SmsAssistantBy\Exceptions\MessageIdException',
         -12 => 'ByZer0\SmsAssistantBy\Exceptions\ServerException',

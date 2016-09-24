@@ -27,7 +27,7 @@
 namespace ByZer0\SmsAssistantBy\Exceptions;
 
 /**
- * Description of LowBalanceException
+ * Incorrect sender name. You are not allowed to send messages from this sender.
  *
  * @author Zer0
  */

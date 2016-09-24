@@ -27,7 +27,7 @@
 namespace ByZer0\SmsAssistantBy\Exceptions;
 
 /**
- * Description of LowBalanceException
+ * API Authentification error. Wrong username and/or password.
  *
  * @author Zer0
  */

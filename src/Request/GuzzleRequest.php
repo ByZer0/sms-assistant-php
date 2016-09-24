@@ -29,7 +29,7 @@ namespace ByZer0\SmsAssistantBy\Request;
 use GuzzleHttp\Client;
 
 /**
- * Description of GuzzleRequest
+ * Request interface implementation with Guzzle library.
  *
  * @author Zer0
  */
@@ -53,12 +53,14 @@ class GuzzleRequest implements RequestInterface
     {
         $client = $this->getClient();
         $response = $client->get($url, ['query' => $data]);
+
         return $response->getBody()->getContents();
     }
 
     public function post($url, $data)
     {
         $client = $this->getClient();
+
         return $client->post($url, [
             'data' => $data,
         ]);
@@ -74,6 +76,7 @@ class GuzzleRequest implements RequestInterface
         if (is_null($this->client)) {
             $this->client = new Client([]);
         }
+
         return $this->client;
     }
 }

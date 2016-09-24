@@ -27,7 +27,7 @@
 namespace ByZer0\SmsAssistantBy\Exceptions;
 
 /**
- * Description of LowBalanceException
+ * Something goes wrong, internal API exception occured.
  *
  * @author Zer0
  */
