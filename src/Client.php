@@ -165,6 +165,27 @@ class Client
         }
     }
 
+    /**
+     * Send multiple messages.
+     *
+     * Every message field (if presented) will override value from $default.
+     * Only phone is required in every message. Each message can have following fields:
+     *
+     * - phone : (required). Phone number of recipient.
+     * - text: (optional). Override default message text for this message with custom text.
+     * - sender: (optional). Override default sender name for this message with custom name.
+     *
+     * Default message can have following fields (all fields are optional):
+     *
+     * - text: Common text for all messages.
+     * - sender: Common sender name for all messages.
+     *
+     * @param array     $messages  Array of messages.
+     * @param array     $default   Default message config.
+     * @param \DateTime $time      Time when send message. Optional, only if messages delivery must be delayed.
+     *
+     * @return bool
+     */
     public function sendMessages($messages, $default = [], $time = null)
     {
         $data = '<?xml version="1.0" encoding="utf-8" ?>';
@@ -174,27 +195,49 @@ class Client
         }
         $data .= "<package $attributes><message>";
 
-        $attributes = '';
-        if (isset($default['sender'])) {
-            $attributes .= " sender=\"{$default['sender']}\"";
-        } else {
-            $attributes .= " sender=\"{$this->sender}\"";
-        }
-        $text = isset($default['text']) ? $default['text'] : '';
-        $data .= "<default$attributes>$text</default>";
+        $data .= $this->makeDefaultMessageXml($default);
 
         foreach ($messages as $message) {
-            $text = isset($message['text']) ? $message['text'] : '';
-            $attributes = '';
-            if (isset($message['sender'])) {
-                $attributes .= " sender=\"{$message['sender']}\"";
-            }
-
-            $data .= "<msg recipient=\"{$message['phone']}\"$attributes>$text</msg>";
+            $data .= $this->makeMessageXml($message);
         }
         $data .= '</message></package>';
 
         return $this->client->postXml($this->getEndpointUrl('xml'), $data);
+    }
+
+    /**
+     * Convert default message parameters to XML string.
+     *
+     * @param array $message
+     * @return string
+     */
+    protected function makeDefaultMessageXml($message)
+    {
+        $attributes = '';
+        if (isset($message['sender'])) {
+            $attributes .= " sender=\"{$message['sender']}\"";
+        } else {
+            $attributes .= " sender=\"{$this->sender}\"";
+        }
+        $text = isset($message['text']) ? $message['text'] : '';
+        return "<default$attributes>$text</default>";
+    }
+
+    /**
+     * Convert message parameters to XML string.
+     *
+     * @param array $message
+     * @return string
+     */
+    protected function makeMessageXml($message)
+    {
+        $text = isset($message['text']) ? $message['text'] : '';
+        $attributes = '';
+        if (isset($message['sender'])) {
+            $attributes .= " sender=\"{$message['sender']}\"";
+        }
+
+        return "<msg recipient=\"{$message['phone']}\"$attributes>$text</msg>";
     }
 
     /**
