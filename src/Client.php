@@ -180,9 +180,9 @@ class Client
      * - text: Common text for all messages.
      * - sender: Common sender name for all messages.
      *
-     * @param array     $messages  Array of messages.
-     * @param array     $default   Default message config.
-     * @param \DateTime $time      Time when send message. Optional, only if messages delivery must be delayed.
+     * @param array     $messages Array of messages.
+     * @param array     $default  Default message config.
+     * @param \DateTime $time     Time when send message. Optional, only if messages delivery must be delayed.
      *
      * @return bool
      */
@@ -209,6 +209,7 @@ class Client
      * Convert default message parameters to XML string.
      *
      * @param array $message
+     *
      * @return string
      */
     protected function makeDefaultMessageXml($message)
@@ -220,6 +221,7 @@ class Client
             $attributes .= " sender=\"{$this->sender}\"";
         }
         $text = isset($message['text']) ? $message['text'] : '';
+
         return "<default$attributes>$text</default>";
     }
 
@@ -227,6 +229,7 @@ class Client
      * Convert message parameters to XML string.
      *
      * @param array $message
+     *
      * @return string
      */
     protected function makeMessageXml($message)
