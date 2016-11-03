@@ -13,7 +13,7 @@ Add following requirement to your `composer.json` file:
 ```json
 {
     "require": {
-        "by-zer0/sms-assistant-php": "1.0"
+        "by-zer0/sms-assistant-php": "1.1"
     }
 }
 ```
@@ -21,7 +21,7 @@ Add following requirement to your `composer.json` file:
 or just use composer command
 
 ```bash
-composer require by-zer0/sms-assistant-php:1.0
+composer require by-zer0/sms-assistant-php:1.1
 ```
 
 # Usage
