@@ -27,7 +27,7 @@
 namespace ByZer0\SmsAssistantBy\Exceptions;
 
 /**
- * API Authentification error. Wrong username and/or password.
+ * API Authentification error. Wrong username and/or token.
  *
  * @author Zer0
  */

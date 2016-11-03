@@ -57,11 +57,11 @@ class Client
     protected $username;
 
     /**
-     * Your sms-assistent.by password, need for API authorization.
+     * Your sms-assistent.by access token, need for API authorization.
      *
      * @var string
      */
-    protected $password;
+    protected $token;
 
     /**
      * Sender name. Messages will be sent from this name. It must be one of available
@@ -74,22 +74,22 @@ class Client
     protected $sender;
 
     /**
-     * Construct instance of Client. Need to pass API authorization data (username and password)
+     * Construct instance of Client. Need to pass API authorization data (username and token)
      * to constructor. Also, sender name is required. Sender name must be one of available to you
      * senders.
      *
      * @param string                                          $username
-     * @param string                                          $password
+     * @param string                                          $token
      * @param \ByZer0\SmsAssistantBy\Request\RequestInterface $httpClient
      */
-    public function __construct($username, $password, $httpClient)
+    public function __construct($username, $token, $httpClient)
     {
         if (empty($username)) {
             throw new Exception('Username cannot be empty.');
         }
 
-        if (empty($password)) {
-            throw new Exception('Password cannot be empty.');
+        if (empty($token)) {
+            throw new Exception('Token cannot be empty.');
         }
 
         if (empty($httpClient)) {
@@ -97,7 +97,7 @@ class Client
         }
 
         $this->username = $username;
-        $this->password = $password;
+        $this->token = $token;
         $this->client = $httpClient;
     }
 
@@ -122,10 +122,9 @@ class Client
      */
     public function getBalance()
     {
-        $response = $this->client->get($this->getEndpointUrl('credits/plain'), [
-            'user'     => $this->username,
-            'password' => $this->password,
-        ]);
+        $data = ['user' => $this->username];
+        $headers = ['requestAuthToken' => $this->token];
+        $response = $this->client->get($this->getEndpointUrl('credits/plain'), $data, $headers);
         $balance = floatval($response);
         if ($balance >= 0) {
             return $balance;
@@ -148,15 +147,15 @@ class Client
     {
         $data = [
             'user'      => $this->username,
-            'password'  => $this->password,
             'recipient' => $phone,
             'message'   => $text,
             'sender'    => $sender ?: $this->sender,
         ];
+        $headers = ['requestAuthToken' => $this->token];
         if (!is_null($time)) {
             $data['date_send'] = $time->format('YmdHi');
         }
-        $response = $this->client->get($this->getEndpointUrl('send_sms/plain'), $data);
+        $response = $this->client->get($this->getEndpointUrl('send_sms/plain'), $data, $headers);
         $code = intval($response);
         if ($code < 0) {
             Exception::raiseFromCode($code);
@@ -189,7 +188,7 @@ class Client
     public function sendMessages($messages, $default = [], $time = null)
     {
         $data = '<?xml version="1.0" encoding="utf-8" ?>';
-        $attributes = "login=\"{$this->username}\" password=\"{$this->password}\"";
+        $attributes = "login=\"{$this->username}\"";
         if (isset($time)) {
             $attributes .= " date_send=\"{$time->format('YmdHi')}\"";
         }
@@ -202,7 +201,9 @@ class Client
         }
         $data .= '</message></package>';
 
-        return $this->client->postXml($this->getEndpointUrl('xml'), $data);
+        $headers = ['requestAuthToken' => $this->token];
+
+        return $this->client->postXml($this->getEndpointUrl('xml'), $data, $headers);
     }
 
     /**
@@ -258,15 +259,15 @@ class Client
     }
 
     /**
-     * Change password for API requests.
+     * Change token for API requests.
      *
-     * @param string $password
+     * @param string $token
      *
      * @return $this
      */
-    public function setPassword($password)
+    public function setToken($token)
     {
-        $this->password = $password;
+        $this->token = $token;
 
         return $this;
     }

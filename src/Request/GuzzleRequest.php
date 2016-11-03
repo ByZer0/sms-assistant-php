@@ -50,27 +50,32 @@ class GuzzleRequest implements RequestInterface
         }
     }
 
-    public function get($url, $data)
+    public function get($url, $data, $headers)
     {
         $client = $this->getClient();
-        $response = $client->get($url, ['query' => $data]);
+        $response = $client->get($url, [
+            'query' => $data,
+            'headers' => $headers,
+        ]);
 
         return $response->getBody()->getContents();
     }
 
-    public function post($url, $data)
+    public function post($url, $data, $headers)
     {
         $client = $this->getClient();
 
         return $client->post($url, [
             'data' => $data,
+            'headers' => $headers,
         ]);
     }
 
-    public function postXml($url, $xml)
+    public function postXml($url, $xml, $headers)
     {
+        $headers['Content-Type'] = 'text/xml; charset=UTF8';
         $client = $this->getClient();
-        $request = new Request('POST', $url, ['Content-Type' => 'text/xml; charset=UTF8'], $xml);
+        $request = new Request('POST', $url, $headers, $xml);
 
         return $client->send($request);
     }

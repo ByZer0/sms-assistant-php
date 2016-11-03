@@ -39,7 +39,7 @@ interface RequestInterface
      * @param string $url
      * @param array  $data
      */
-    public function get($url, $data);
+    public function get($url, $data, $headers);
 
     /**
      * Make POST request to API. $data will be sent as POST data in request body.
@@ -47,7 +47,7 @@ interface RequestInterface
      * @param string $url
      * @param array  $data
      */
-    public function post($url, $data);
+    public function post($url, $data, $headers);
 
     /**
      * Make POST request to API with XML data (Content-Type: text/xml; charset=UTF8).
@@ -55,5 +55,5 @@ interface RequestInterface
      * @param string $url
      * @param string $xml
      */
-    public function postXml($url, $xml);
+    public function postXml($url, $xml, $headers);
 }

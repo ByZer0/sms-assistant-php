@@ -34,7 +34,7 @@ require 'vendor/autoload.php';
 use ByZer0\SmsAssistantBy\Client;
 use ByZer0\SmsAssistantBy\Request\GuzzleRequest;
 
-$client = new Client('<username>', '<password>', new GuzzleRequest());
+$client = new Client('<username>', '<token>', new GuzzleRequest());
 $client->setSender('<sender-name>'); // Set default sender name.
 ```
 
