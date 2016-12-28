@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-namespace ByZer0\SmsAssistantBy\Request;
+namespace ByZer0\SmsAssistantBy\Http;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
@@ -34,7 +34,7 @@ use GuzzleHttp\Psr7\Request;
  *
  * @author Zer0
  */
-class GuzzleRequest implements RequestInterface
+class GuzzleClient implements ClientInterface
 {
     /**
      * Client instance.

@@ -27,6 +27,8 @@
 namespace ByZer0\SmsAssistantBy;
 
 use ByZer0\SmsAssistantBy\Exceptions\Exception;
+use ByZer0\SmsAssistantBy\Exceptions\AuthentificationException;
+use ByZer0\SmsAssistantBy\Http\ClientInterface as HttpClientInterface;
 
 /**
  * sms-assistent.by HTTP API client class.
@@ -45,7 +47,7 @@ class Client
     /**
      * HTTP client instance which will actually perform requests.
      *
-     * @var \ByZer0\SmsAssistantBy\Request\RequestInterface
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -58,10 +60,19 @@ class Client
 
     /**
      * Your sms-assistent.by access token, need for API authorization.
+     * Either token or password must be set.
      *
      * @var string
      */
     protected $token;
+
+    /**
+     * Your sms-assistent.by account password, need for API authorization.
+     * Either token or password must be set.
+     *
+     * @var string
+     */
+    protected $password;
 
     /**
      * Sender name. Messages will be sent from this name. It must be one of available
@@ -74,30 +85,16 @@ class Client
     protected $sender;
 
     /**
-     * Construct instance of Client. Need to pass API authorization data (username and token)
-     * to constructor. Also, sender name is required. Sender name must be one of available to you
-     * senders.
+     * Construct instance of Client, underlying HTTP client instance must be set.
      *
-     * @param string                                          $username
-     * @param string                                          $token
-     * @param \ByZer0\SmsAssistantBy\Request\RequestInterface $httpClient
+     * @param HttpClientInterface $httpClient
      */
-    public function __construct($username, $token, $httpClient)
+    public function __construct($httpClient)
     {
-        if (empty($username)) {
-            throw new Exception('Username cannot be empty.');
-        }
-
-        if (empty($token)) {
-            throw new Exception('Token cannot be empty.');
-        }
-
         if (empty($httpClient)) {
             throw new Exception('HTTP client instance must be set.');
         }
 
-        $this->username = $username;
-        $this->token = $token;
         $this->client = $httpClient;
     }
 
@@ -114,16 +111,50 @@ class Client
     }
 
     /**
+     * Check if authorization data is set.
+     *
+     * @throws \Exception
+     */
+    protected function checkAuthorizationData()
+    {
+        if (empty($this->username)) {
+            throw new AuthentificationException('Username cannot be empty.');
+        }
+
+        if (empty($this->token) && empty($this->password)) {
+            throw new AuthentificationException('Either token or account password must be set.');
+        }
+    }
+
+    /**
+     * Add authorization data to request data and/or headers.
+     *
+     * @param array $data
+     * @param array $headers
+     */
+    protected function buildAuthorizationData(&$data, &$headers)
+    {
+        $data['user'] = $this->username;
+        if ($this->token) {
+            $headers['requestAuthToken'] = $this->token;
+        } else {
+            $data['password'] = $this->password;
+        }
+    }
+
+    /**
      * Retreive current user balance status. Returns available amount of credits.
      *
-     * @throws \ByZer0\SmsAssistantBy\Exceptions\Exception
+     * @throws Exception
      *
      * @return float
      */
     public function getBalance()
     {
-        $data = ['user' => $this->username];
-        $headers = ['requestAuthToken' => $this->token];
+        $this->checkAuthorizationData();
+
+        $data = $headers = [];
+        $this->buildAuthorizationData($data, $headers);
         $response = $this->client->get($this->getEndpointUrl('credits/plain'), $data, $headers);
         $balance = floatval($response);
         if ($balance >= 0) {
@@ -145,16 +176,19 @@ class Client
      */
     public function sendMessage($phone, $text, $time = null, $sender = null)
     {
+        $this->checkAuthorizationData();
+
         $data = [
             'user'      => $this->username,
             'recipient' => $phone,
             'message'   => $text,
             'sender'    => $sender ?: $this->sender,
         ];
-        $headers = ['requestAuthToken' => $this->token];
         if (!is_null($time)) {
             $data['date_send'] = $time->format('YmdHi');
         }
+        $headers = [];
+        $this->buildAuthorizationData($data, $headers);
         $response = $this->client->get($this->getEndpointUrl('send_sms/plain'), $data, $headers);
         $code = intval($response);
         if ($code < 0) {
@@ -187,11 +221,14 @@ class Client
      */
     public function sendMessages($messages, $default = [], $time = null)
     {
+        $this->checkAuthorizationData();
+
         $data = '<?xml version="1.0" encoding="utf-8" ?>';
         $attributes = "login=\"{$this->username}\"";
         if (isset($time)) {
             $attributes .= " date_send=\"{$time->format('YmdHi')}\"";
         }
+        $this->token ?: $attributes .= " password=\"{$this->password}\"";
         $data .= "<package $attributes><message>";
 
         $data .= $this->makeDefaultMessageXml($default);
@@ -201,7 +238,7 @@ class Client
         }
         $data .= '</message></package>';
 
-        $headers = ['requestAuthToken' => $this->token];
+        $headers = $this->token ? ['requestAuthToken' => $this->token] : [];
 
         return $this->client->postXml($this->getEndpointUrl('xml'), $data, $headers);
     }
@@ -273,6 +310,20 @@ class Client
     }
 
     /**
+     * Change password for API requests.
+     *
+     * @param string $password
+     *
+     * @return $this
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
      * Change sender name.
      *
      * @param string $sender
@@ -282,6 +333,23 @@ class Client
     public function setSender($sender)
     {
         $this->sender = $sender;
+
+        return $this;
+    }
+
+    /**
+     * Change base API URL, can be used for testing purposes.
+     *
+     * @param string $url
+     *
+     * @return $this
+     */
+    public function setBaseUrl($url)
+    {
+        if ($url[strlen($url) - 1] !== '/') {
+            $url .= '/';
+        }
+        $this->baseUrl = $url;
 
         return $this;
     }

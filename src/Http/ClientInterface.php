@@ -24,14 +24,14 @@
  * THE SOFTWARE.
  */
 
-namespace ByZer0\SmsAssistantBy\Request;
+namespace ByZer0\SmsAssistantBy\Http;
 
 /**
  * Common interface for HTTP libraries.
  *
  * @author Zer0
  */
-interface RequestInterface
+interface ClientInterface
 {
     /**
      * Make GET request to API. $data will be sent as query params.
