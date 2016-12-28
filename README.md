@@ -13,7 +13,7 @@ Add following requirement to your `composer.json` file:
 ```json
 {
     "require": {
-        "by-zer0/sms-assistant-php": "1.1"
+        "by-zer0/sms-assistant-php": "1.2"
     }
 }
 ```
@@ -21,7 +21,7 @@ Add following requirement to your `composer.json` file:
 or just use composer command
 
 ```bash
-composer require by-zer0/sms-assistant-php:1.1
+composer require by-zer0/sms-assistant-php:1.2
 ```
 
 # Usage
@@ -34,11 +34,14 @@ require 'vendor/autoload.php';
 use ByZer0\SmsAssistantBy\Client;
 use ByZer0\SmsAssistantBy\Request\GuzzleRequest;
 
-$client = new Client('<username>', '<token>', new GuzzleRequest());
+$client = new Client(new GuzzleRequest());
+$client->setUsername('<username>'); // Set username to pass API authorization.
 $client->setSender('<sender-name>'); // Set default sender name.
+$client->setPassword('<password>'); // Set account password to pass API authorization.
+// $client->setToken('<token>'); // Optional, set access token instead of password.
 ```
 
-Constructor's third parameter accepts `ByZer0\SmsAssistantBy\Request\RequestInterface` instance. This instance will be actually used to perform HTTP requests. By default, package contains `ByZer0\SmsAssistantBy\Request\GuzzleRequest` class - request wrapper for `guzzlehttp/guzzle` library. You can write your own implementation of `RequestInterface` to use with any other library.
+Constructor accepts `ByZer0\SmsAssistantBy\Http\ClientInterface` instance. This instance will be actually used to perform HTTP requests. By default, package contains `ByZer0\SmsAssistantBy\Http\GuzzleClient` class - request wrapper for `guzzlehttp/guzzle` library. You can write your own implementation of `ClientInterface` to use with any other library.
 
 ## Massive sending
 
