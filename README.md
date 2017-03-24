@@ -32,9 +32,9 @@ First create client instance.
 require 'vendor/autoload.php';
 
 use ByZer0\SmsAssistantBy\Client;
-use ByZer0\SmsAssistantBy\Request\GuzzleRequest;
+use ByZer0\SmsAssistantBy\Http\GuzzleClient;
 
-$client = new Client(new GuzzleRequest());
+$client = (new Client(new GuzzleClient()))
 $client->setUsername('<username>'); // Set username to pass API authorization.
 $client->setSender('<sender-name>'); // Set default sender name.
 $client->setPassword('<password>'); // Set account password to pass API authorization.
