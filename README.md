@@ -35,13 +35,19 @@ use ByZer0\SmsAssistantBy\Client;
 use ByZer0\SmsAssistantBy\Http\GuzzleClient;
 
 $client = (new Client(new GuzzleClient()))
-$client->setUsername('<username>'); // Set username to pass API authorization.
-$client->setSender('<sender-name>'); // Set default sender name.
-$client->setPassword('<password>'); // Set account password to pass API authorization.
-// $client->setToken('<token>'); // Optional, set access token instead of password.
+    ->setUsername('<username>') // Set username to pass API authorization.
+    ->setSender('<sender-name>') // Set default sender name.
+    ->setPassword('<password>'); // Set account password to pass API authorization.
+//    ->setToken('<token>'); // Optional, set access token instead of password.
 ```
 
-Constructor accepts `ByZer0\SmsAssistantBy\Http\ClientInterface` instance. This instance will be actually used to perform HTTP requests. By default, package contains `ByZer0\SmsAssistantBy\Http\GuzzleClient` class - request wrapper for `guzzlehttp/guzzle` library. You can write your own implementation of `ClientInterface` to use with any other library.
+Constructor accepts `ByZer0\SmsAssistantBy\Http\ClientInterface` instance. This instance will be actually used to perform HTTP requests. By default, package contains `ByZer0\SmsAssistantBy\Http\GuzzleClient` class - request wrapper for `guzzlehttp/guzzle` library. You can write your own implementation of `ByZer0\SmsAssistantBy\Http\ClientInterface` to use with any other library.
+
+Execute following command if you want to use default guzzle adapter:
+
+```bash
+composer require guzzlehttp/guzzle
+```
 
 ## Massive sending
 
